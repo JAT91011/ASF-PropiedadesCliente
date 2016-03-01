@@ -1,6 +1,5 @@
 package views;
 
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -24,7 +23,7 @@ public class Window extends JFrame {
 		setSize(600, 400);
 		setIconImage((new ImageIcon("icons/app-icon.png")).getImage());
 		setMinimumSize(new Dimension(700, 500));
-		setTitle("Tracker");
+		setTitle("Propiedades");
 		setLocationRelativeTo(null);
 
 		this.slider = new JSlidePanel<JFrame>(this);
