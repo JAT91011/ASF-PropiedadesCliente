@@ -20,7 +20,7 @@ public class Window extends JFrame {
 		super();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setIconImage(null);
-		setSize(600, 400);
+		setSize(400, 700);
 		setIconImage((new ImageIcon("icons/app-icon.png")).getImage());
 		setMinimumSize(new Dimension(700, 500));
 		setTitle("Propiedades");

@@ -4,9 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.UIManager;
 
-import views.StartPanel;
-import views.TabsPanel;
 import views.Window;
+import views.lists.PropiedadesListPanel;
 
 public class Application {
 
@@ -15,9 +14,7 @@ public class Application {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-					StartPanel panel = new StartPanel();
-					Window.getInstance().getSlider().addComponent(panel);
-					Window.getInstance().getSlider().addComponent(new TabsPanel());
+					Window.getInstance().getSlider().addComponent(new PropiedadesListPanel());
 					Window.getInstance().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
