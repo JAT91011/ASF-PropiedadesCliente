@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,7 +21,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import entities.Propiedad;
 import utilitiies.FileChooser;
+import utilitiies.JAXBManager;
 
 public class PropiedadesListPanel extends JPanel implements ActionListener {
 
@@ -190,14 +193,19 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	}
 
 	public void loadData() {
-
+		// TODO Obtener las propiedades del servidor
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (btnImport == e.getSource()) {
-			File xmlFile = FileChooser.openFile("Ficheros XML", "xml");
+			File xmlFile = FileChooser.openFile("Ficheros XML", "files/", "xml");
 			if (xmlFile != null && xmlFile.exists()) {
 				System.out.println(xmlFile.getAbsolutePath());
+				ArrayList<Propiedad> properties = JAXBManager.getInstance().importProperties(xmlFile.getAbsolutePath());
+				System.out.println("Propiedades a importar: " + properties.size());
+				for (Propiedad p : properties) {
+					System.out.println(p.getDescripcion());
+				}
 			}
 		} else if (btnNew == e.getSource()) {
 

@@ -19,8 +19,8 @@ public class FileChooser {
 	 *            - The extension of the file. Could be multiple extensions.
 	 * @return The file loaded
 	 */
-	public static File openFile(final String description, final String... extensions) {
-		final JFileChooser fileChooser = new JFileChooser();
+	public static File openFile(final String description, String directory, final String... extensions) {
+		final JFileChooser fileChooser = new JFileChooser(directory);
 		fileChooser.setFileFilter(new FileNameExtensionFilter(description, extensions));
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		String path = "";
@@ -49,8 +49,7 @@ public class FileChooser {
 	 *            - The file in where to save
 	 * @return The path of the saved file
 	 */
-	public static String saveObjectFile(final Object content, final String description, final String extension,
-			final File file) {
+	public static String saveObjectFile(final Object content, final String description, final String extension, final File file) {
 		final JFileChooser fileChooser = new JFileChooser();
 		final FileNameExtensionFilter langFilter = new FileNameExtensionFilter(description, extension);
 		fileChooser.setFileFilter(langFilter);
@@ -63,9 +62,8 @@ public class FileChooser {
 					path += "." + extension;
 				}
 				final File file2 = new File(path);
-				if ((file2.exists() && JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null,
-						"The file exists, do you want to replace it?", "File Exists", JOptionPane.YES_NO_OPTION))
-						|| !file2.exists()) {
+				if ((file2.exists() && JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null, "The file exists, do you want to replace it?",
+						"File Exists", JOptionPane.YES_NO_OPTION)) || !file2.exists()) {
 					final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
 					oos.writeObject(content);
 					oos.close();

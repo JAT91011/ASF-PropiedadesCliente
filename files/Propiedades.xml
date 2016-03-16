@@ -1,43 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <propiedades>
 
-	<propiedad>
-       <nombre>Olazabal Azpikoa</nombre>
-       <descripcion>Situada en un entorno privilegiado, con maravillosas vistas a la Sierra Salvada. Casa rural de alquiler íntegro en Murga para disfrutar con jardín, piscina, barbacoa y que también admite animales.</descripcion>
-       <direccion>C/ La Iglesia, 10</direccion>
-       <latitud>43.271536</latitud>
-       <longitud>-2.940206</longitud>
-       <area>400m2</area>
-       <precio>100.00</precio>
-       <municipio>
-       	Atxondo, Vizcaya
-       </municipio>
-     </propiedad>
-     
-     <propiedad>
-       <nombre>Lupardika</nombre>
-       <descripcion>Casa rural de alquiler íntegro en Orduña dotada con calefacción, televisión, sala de estar y con cuna disponible.</descripcion>
-       <direccion>C/ Donibane, 11</direccion>
-       <latitud>42.995375</latitud>
-       <longitud>-3.010556</longitud>
-       <area>380m2</area>
-       <precio>110.00</precio>
-       <municipio>
-       	Orduña, Vizcaya
-       </municipio>
-     </propiedad>
-     
-     <propiedad>
-       <nombre>Ibarluze</nombre>
-       <descripcion>Casa rural de alquiler íntegro en Elorrio para disfrutar con jardín, barbacoa, chimenea y calefacción.</descripcion>
-       <direccion>C/ Iguria Auzoa, 18</direccion>
-       <latitud>43.110727</latitud>
-       <longitud>-2.53244</longitud>
-       <area>200m2</area>
-       <precio>90.00</precio>
-       <municipio>
-       	Elorrio, Vizcaya
-       </municipio>
-     </propiedad>
-     
+    <propiedad>
+        <nombre>Olazabal Azpikoa</nombre>
+        <descripcion>Situada en un entorno privilegiado, con maravillosas vistas a la Sierra Salvada. Casa rural de alquiler íntegro en Murga para disfrutar con jardín, piscina, barbacoa y que también admite animales.</descripcion>
+        <direccion>C/ La Iglesia, 10</direccion>
+        <latitud>43.271536</latitud>
+        <longitud>-2.940206</longitud>
+        <area>400m2</area>
+        <precio>100.00</precio>
+        <municipio>
+            <nombre>Atxondo</nombre>
+            <provincia>
+                <nombre>Vizcaya</nombre>
+            </provincia>
+        </municipio>
+    </propiedad>
+    
+    <propiedad>
+        <nombre>Lupardika</nombre>
+        <descripcion>Casa rural de alquiler íntegro en Orduña dotada con calefacción, televisión, sala de estar y con cuna disponible.</descripcion>
+        <direccion>C/ Donibane, 11</direccion>
+        <latitud>42.995375</latitud>
+        <longitud>-3.010556</longitud>
+        <area>380m2</area>
+        <precio>110.00</precio>
+        <municipio>
+            <nombre>Orduña</nombre>
+            <provincia>
+                <nombre>Vizcaya</nombre>
+            </provincia>
+        </municipio>
+    </propiedad>
+    
 </propiedades>
