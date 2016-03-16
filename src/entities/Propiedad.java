@@ -17,15 +17,15 @@ public class Propiedad {
 	private double		area;
 	private double		precio;
 
-	@XmlElement(name = "municipio")
-	private Municipio	municipio;
+	@XmlElement(name = "provincia")
+	private Provincia	provincia;
 
 	public Propiedad() {
 
 	}
 
 	public Propiedad(String nombre, String descripcion, String direccion, float latitud, float longitud, double area, double precio,
-			Municipio municipio) {
+			Provincia provincia) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.direccion = direccion;
@@ -33,7 +33,7 @@ public class Propiedad {
 		this.longitud = longitud;
 		this.area = area;
 		this.precio = precio;
-		this.municipio = municipio;
+		this.provincia = provincia;
 	}
 
 	public String getNombre() {
@@ -92,11 +92,11 @@ public class Propiedad {
 		this.precio = precio;
 	}
 
-	public Municipio getMunicipio() {
-		return municipio;
+	public Provincia getProvincia() {
+		return provincia;
 	}
 
-	public void setMunicipio(Municipio municipio) {
-		this.municipio = municipio;
+	public void setProvincia(Provincia provincia) {
+		this.provincia = provincia;
 	}
 }
