@@ -8,18 +8,18 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import entities.Propiedad;
 import entities.wrappers.Propiedades;
 
 public class JAXBManager {
+
 	private static JAXBManager instance;
 
 	private JAXBManager() {
 
 	}
 
-	public ArrayList<Propiedad> importProperties(final String path) {
-		ArrayList<Propiedad> propiedadesList = null;
+	public ArrayList<entities.Propiedad> importProperties(final String path) {
+		ArrayList<entities.Propiedad> propiedadesList = null;
 		try {
 			JAXBContext context = JAXBContext.newInstance(Propiedades.class);
 			Unmarshaller um = context.createUnmarshaller();
@@ -29,6 +29,25 @@ public class JAXBManager {
 			e1.printStackTrace();
 		}
 		return propiedadesList;
+	}
+
+	public entities.xsd.Provincia parseProvincia(entities.Provincia provincia) {
+		entities.xsd.Provincia p = new entities.xsd.Provincia();
+		p.setNombre(provincia.getNombre());
+		return p;
+	}
+
+	public entities.xsd.Propiedad parsePropiedad(entities.Propiedad propiedad) {
+		entities.xsd.Propiedad p = new entities.xsd.Propiedad();
+		p.setNombre(propiedad.getNombre());
+		p.setDescripcion(propiedad.getDescripcion());
+		p.setDireccion(propiedad.getDireccion());
+		p.setProvincia(parseProvincia(propiedad.getProvincia()));
+		p.setLatitud(propiedad.getLatitud());
+		p.setLongitud(propiedad.getLongitud());
+		p.setPrecio(propiedad.getPrecio());
+		p.setArea(propiedad.getArea());
+		return p;
 	}
 
 	public static JAXBManager getInstance() {
