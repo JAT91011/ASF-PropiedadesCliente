@@ -11,32 +11,47 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import entities.Propiedad;
+import entities.Provincia;
 import utilitiies.FileChooser;
 import utilitiies.JAXBManager;
+import views.Window;
+import views.items.PropiedadesPanel;
 
 public class PropiedadesListPanel extends JPanel implements ActionListener {
 
-	private static final long	serialVersionUID	= 5253268925767443459L;
-	private JTable				tableContent;
+	private static final long		serialVersionUID	= 5253268925767443459L;
+	private JTable					tableContent;
 
-	private JButton				btnImport;
-	private JButton				btnNew;
-	private JButton				btnEdit;
+	private Vector<Propiedad>		propiedades;
 
-	private JButton				btnFind;
-	private JButton				btnClear;
-	private JButton				btnRemove;
+	private JButton					btnImport;
+	private JButton					btnNew;
+	private JButton					btnEdit;
+
+	private JButton					btnFind;
+	private JButton					btnClear;
+	private JButton					btnRemove;
+	private JLabel					lblNombre;
+	private JTextField				txtNombre;
+	private JLabel					lblProvincia;
+	private JComboBox<Propiedad>	cboProvincias;
 
 	public PropiedadesListPanel() {
 
@@ -142,10 +157,10 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		scrollPane.setViewportView(tableContent);
 
 		JPanel panBottom = new JPanel();
-		panBottom.setSize(new Dimension(0, 200));
+		panBottom.setSize(new Dimension(0, 150));
 		panBottom.setMinimumSize(new Dimension(10, 150));
-		panBottom.setMaximumSize(new Dimension(32767, 250));
-		panBottom.setPreferredSize(new Dimension(10, 200));
+		panBottom.setMaximumSize(new Dimension(32767, 150));
+		panBottom.setPreferredSize(new Dimension(10, 150));
 		panBottom.setBackground(Color.WHITE);
 		splitPane.setRightComponent(panBottom);
 		GridBagLayout gbl_panBottom = new GridBagLayout();
@@ -164,6 +179,44 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_panelFilter.gridx = 0;
 		gbc_panelFilter.gridy = 0;
 		panBottom.add(panelFilter, gbc_panelFilter);
+		GridBagLayout gbl_panelFilter = new GridBagLayout();
+		gbl_panelFilter.columnWidths = new int[] { 10, 0, 0, 0 };
+		gbl_panelFilter.rowHeights = new int[] { 10, 0, 0, 0 };
+		gbl_panelFilter.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelFilter.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		panelFilter.setLayout(gbl_panelFilter);
+
+		lblNombre = new JLabel("Nombre");
+		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
+		gbc_lblNombre.insets = new Insets(0, 0, 10, 5);
+		gbc_lblNombre.anchor = GridBagConstraints.WEST;
+		gbc_lblNombre.gridx = 1;
+		gbc_lblNombre.gridy = 1;
+		panelFilter.add(lblNombre, gbc_lblNombre);
+
+		txtNombre = new JTextField();
+		GridBagConstraints gbc_txtNombre = new GridBagConstraints();
+		gbc_txtNombre.anchor = GridBagConstraints.WEST;
+		gbc_txtNombre.insets = new Insets(0, 0, 10, 0);
+		gbc_txtNombre.gridx = 2;
+		gbc_txtNombre.gridy = 1;
+		panelFilter.add(txtNombre, gbc_txtNombre);
+		txtNombre.setColumns(20);
+
+		lblProvincia = new JLabel("Provincia");
+		GridBagConstraints gbc_lblProvincia = new GridBagConstraints();
+		gbc_lblProvincia.anchor = GridBagConstraints.WEST;
+		gbc_lblProvincia.insets = new Insets(0, 0, 0, 5);
+		gbc_lblProvincia.gridx = 1;
+		gbc_lblProvincia.gridy = 2;
+		panelFilter.add(lblProvincia, gbc_lblProvincia);
+
+		cboProvincias = new JComboBox<Propiedad>();
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 2;
+		gbc_comboBox.gridy = 2;
+		panelFilter.add(cboProvincias, gbc_comboBox);
 
 		btnFind = new JButton("BUSCAR");
 		btnFind.setIcon(new ImageIcon("icons/search-icon.png"));
@@ -193,7 +246,11 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	}
 
 	public void loadData() {
-		// TODO Obtener las propiedades del servidor
+
+		// TODO Obtener todas las provincias
+
+		// TODO Obtener las propiedades del servidor y cargar la tabla
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -208,15 +265,79 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 				}
 			}
 		} else if (btnNew == e.getSource()) {
-
+			insertarPropiedad();
 		} else if (btnEdit == e.getSource()) {
 
 		} else if (btnRemove == e.getSource()) {
 
 		} else if (btnFind == e.getSource()) {
-
+			buscarPropiedades();
 		} else if (btnClear == e.getSource()) {
-
+			txtNombre.setText("");
+			cboProvincias.setSelectedIndex(0);
 		}
+	}
+
+	public void insertarPropiedad() {
+		final PropiedadesPanel p = new PropiedadesPanel(PropiedadesPanel.MODE_NEW, null);
+
+		final String[] options = { "Cancelar", "Guardar" };
+		final JOptionPane pane = new JOptionPane(p, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[1]);
+		final JDialog dialog = pane.createDialog("Nueva propiedad");
+		dialog.setSize(500, 600);
+		dialog.setLocationRelativeTo(Window.getInstance());
+		dialog.setVisible(true);
+
+		if (pane.getValue() == options[0]) {
+			// Al pulsar cancelar cerramos el dialogo
+			dialog.dispose();
+		} else {
+			// Al pulsar guardar
+		}
+	}
+
+	public void editarPropiedad(Propiedad propiedad) {
+		final PropiedadesPanel p = new PropiedadesPanel(PropiedadesPanel.MODE_EDIT, propiedad);
+
+		final String[] options = { "Cancelar", "Guardar" };
+		final JOptionPane pane = new JOptionPane(p, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[1]);
+		final JDialog dialog = pane.createDialog("Editar propiedad");
+		dialog.setSize(500, 600);
+		dialog.setLocationRelativeTo(Window.getInstance());
+		dialog.setVisible(true);
+
+		if (pane.getValue() == options[0]) {
+			// Al pulsar cancelar cerramos el dialogo
+			dialog.dispose();
+		} else {
+			// Al pulsar guardar
+		}
+	}
+
+	public void verPropiedad(Propiedad propiedad) {
+		final PropiedadesPanel p = new PropiedadesPanel(PropiedadesPanel.MODE_VIEW, propiedad);
+
+		final String[] options = { "Volver" };
+		final JOptionPane pane = new JOptionPane(p, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null, options, options[0]);
+		final JDialog dialog = pane.createDialog("Ver propiedad");
+		dialog.setSize(500, 600);
+		dialog.setLocationRelativeTo(Window.getInstance());
+		dialog.setVisible(true);
+
+		if (pane.getValue() == options[0]) {
+			// Al pulsar volver
+			dialog.dispose();
+		}
+	}
+
+	public void eliminarPropiedad() {
+
+	}
+
+	public void buscarPropiedades() {
+		String nombre = txtNombre.getText().trim();
+		Provincia provincia = (Provincia) cboProvincias.getSelectedItem();
+
+		// TODO Filtrar las propiedades
 	}
 }

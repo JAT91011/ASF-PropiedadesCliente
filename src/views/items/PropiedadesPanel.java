@@ -214,7 +214,7 @@ public class PropiedadesPanel extends JPanel {
 
 		// Se cargan los datos si estamos en modo editable
 		if (mode != MODE_NEW) {
-			this.txtId.setText(propiedad.getId());
+			// this.txtId.setText(propiedad.getId());
 			this.txtNombre.setText(propiedad.getNombre());
 			this.txtDescripcion.setText(propiedad.getDescripcion());
 			this.txtDireccion.setText(propiedad.getDireccion());
@@ -234,7 +234,7 @@ public class PropiedadesPanel extends JPanel {
 
 		// Se carga la propiedad con los valores del formulario y la devolvemos
 		Propiedad propiedad = new Propiedad();
-		propiedad.setId(Integer.parseInt(txtId.getText().trim()));
+		// propiedad.setId(Integer.parseInt(txtId.getText().trim()));
 		propiedad.setNombre(txtNombre.getText().trim());
 		propiedad.setDescripcion(txtDescripcion.getText().trim());
 		propiedad.setDireccion(txtDireccion.getText().trim());
