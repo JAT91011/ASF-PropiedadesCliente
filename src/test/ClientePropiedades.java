@@ -34,20 +34,41 @@ public class ClientePropiedades {
 		// Declaramos e inicializamos el stub.
 		PropiedadesSWStub stub = new PropiedadesSWStub("http://localhost:8080/axis2/services/PropiedadesSW");
 
+		// Declaramos todos los servicios que vamos a utilizar
+		ExisteProvinciaConNombre epn;
+		ExisteProvinciaConNombreResponse epnr;
+		InsertarProvincia ip;
+		ObtenerProvinciaPorNombre opn;
+		ObtenerProvinciaPorNombreResponse opnr;
+		ExisteMunicipioConNombre emn;
+		ExisteMunicipioConNombreResponse emnr;
+		InsertarMunicipio im;
+		ObtenerMunicipioPorNombre omn;
+		ObtenerMunicipioPorNombreResponse omnr;
+		InsertarPropiedad ipro;
+		ObtenerPropiedades opro;
+		ObtenerPropiedadesResponse opror;
+		ObtenerPropiedadesPorMunicipio oprom;
+		ObtenerPropiedadesPorMunicipioResponse opromr;
+		ObtenerPropiedadesPorNombre opron;
+		ObtenerPropiedadesPorNombreResponse opronr;
+		EditarPropiedad epro;
+		BorrarPropiedad bpro;
+
 		// Proceso inserción provincia Madrid
 		Provincia p_Madrid = new Provincia();
 		p_Madrid.setNombre("Madrid");
-		ExisteProvinciaConNombre epn = new ExisteProvinciaConNombre();
+		epn = new ExisteProvinciaConNombre();
 		epn.setProvincia("Madrid");
-		ExisteProvinciaConNombreResponse epnr = stub.existeProvinciaConNombre(epn);
+		epnr = stub.existeProvinciaConNombre(epn);
 		if (!epnr.get_return()) {
-			InsertarProvincia ip = new InsertarProvincia();
+			ip = new InsertarProvincia();
 			ip.setP(p_Madrid);
 			stub.insertarProvincia(ip);
 		}
-		ObtenerProvinciaPorNombre opn = new ObtenerProvinciaPorNombre();
+		opn = new ObtenerProvinciaPorNombre();
 		opn.setProvincia("Madrid");
-		ObtenerProvinciaPorNombreResponse opnr = stub.obtenerProvinciaPorNombre(opn);
+		opnr = stub.obtenerProvinciaPorNombre(opn);
 		p_Madrid = opnr.get_return();
 
 		// Proceso inserción provincia Vizcaya
@@ -57,7 +78,7 @@ public class ClientePropiedades {
 		epn.setProvincia("Vizcaya");
 		epnr = stub.existeProvinciaConNombre(epn);
 		if (!epnr.get_return()) {
-			InsertarProvincia ip = new InsertarProvincia();
+			ip = new InsertarProvincia();
 			ip.setP(p_Vizcaya);
 			stub.insertarProvincia(ip);
 		}
@@ -73,7 +94,7 @@ public class ClientePropiedades {
 		epn.setProvincia("Alava");
 		epnr = stub.existeProvinciaConNombre(epn);
 		if (!epnr.get_return()) {
-			InsertarProvincia ip = new InsertarProvincia();
+			ip = new InsertarProvincia();
 			ip.setP(p_Alava);
 			stub.insertarProvincia(ip);
 		}
@@ -86,17 +107,17 @@ public class ClientePropiedades {
 		Municipio m_Bilbao = new Municipio();
 		m_Bilbao.setNombre("Bilbao");
 		m_Bilbao.setProvincia(p_Vizcaya);
-		ExisteMunicipioConNombre emn = new ExisteMunicipioConNombre();
+		emn = new ExisteMunicipioConNombre();
 		emn.setNomMunicipio("Bilbao");
-		ExisteMunicipioConNombreResponse emnr = stub.existeMunicipioConNombre(emn);
+		emnr = stub.existeMunicipioConNombre(emn);
 		if (!emnr.get_return()) {
-			InsertarMunicipio im = new InsertarMunicipio();
+			im = new InsertarMunicipio();
 			im.setM(m_Bilbao);
 			stub.insertarMunicipio(im);
 		}
-		ObtenerMunicipioPorNombre omn = new ObtenerMunicipioPorNombre();
+		omn = new ObtenerMunicipioPorNombre();
 		omn.setNomMunicipio("Bilbao");
-		ObtenerMunicipioPorNombreResponse omnr = stub.obtenerMunicipioPorNombre(omn);
+		omnr = stub.obtenerMunicipioPorNombre(omn);
 		m_Bilbao = omnr.get_return();
 
 		// Proceso inserción municipio Karrantza
@@ -107,7 +128,7 @@ public class ClientePropiedades {
 		emn.setNomMunicipio("Karrantza");
 		emnr = stub.existeMunicipioConNombre(emn);
 		if (!emnr.get_return()) {
-			InsertarMunicipio im = new InsertarMunicipio();
+			im = new InsertarMunicipio();
 			im.setM(m_Karrantza);
 			stub.insertarMunicipio(im);
 		}
@@ -124,7 +145,7 @@ public class ClientePropiedades {
 		emn.setNomMunicipio("Madrid");
 		emnr = stub.existeMunicipioConNombre(emn);
 		if (!emnr.get_return()) {
-			InsertarMunicipio im = new InsertarMunicipio();
+			im = new InsertarMunicipio();
 			im.setM(m_Madrid);
 			stub.insertarMunicipio(im);
 		}
@@ -141,7 +162,7 @@ public class ClientePropiedades {
 		emn.setNomMunicipio("Vitoria");
 		emnr = stub.existeMunicipioConNombre(emn);
 		if (!emnr.get_return()) {
-			InsertarMunicipio im = new InsertarMunicipio();
+			im = new InsertarMunicipio();
 			im.setM(m_Vitoria);
 			stub.insertarMunicipio(im);
 		}
@@ -160,7 +181,7 @@ public class ClientePropiedades {
 		pro_Bilbao.setArea(2500.1);
 		pro_Bilbao.setPrecio(500);
 		pro_Bilbao.setMunicipio(m_Bilbao);
-		InsertarPropiedad ipro = new InsertarPropiedad();
+		ipro = new InsertarPropiedad();
 		ipro.setP(pro_Bilbao);
 		stub.insertarPropiedad(ipro);
 
@@ -210,8 +231,8 @@ public class ClientePropiedades {
 
 		// Obtenemos las propiedades y las mostramos por pantalla
 		System.out.println("Propiedades insertadas:");
-		ObtenerPropiedades opro = new ObtenerPropiedades();
-		ObtenerPropiedadesResponse opror = stub.obtenerPropiedades(opro);
+		opro = new ObtenerPropiedades();
+		opror = stub.obtenerPropiedades(opro);
 		Propiedad[] propiedades = opror.get_return();
 		for (int i = 0; i < propiedades.length; i++) {
 			System.out.println((i + 1) + ". " + propiedades[i].getNombre() + "\n");
@@ -219,9 +240,9 @@ public class ClientePropiedades {
 
 		// Mostramos las propiedades de Bilbao
 		System.out.println("Propiedades en Bilbao:");
-		ObtenerPropiedadesPorMunicipio oprom = new ObtenerPropiedadesPorMunicipio();
+		oprom = new ObtenerPropiedadesPorMunicipio();
 		oprom.setMunicipio("Bilbao");
-		ObtenerPropiedadesPorMunicipioResponse opromr = stub.obtenerPropiedadesPorMunicipio(oprom);
+		opromr = stub.obtenerPropiedadesPorMunicipio(oprom);
 		Propiedad[] propiedadesMunicipio = opromr.get_return();
 		for (int i = 0; i < propiedadesMunicipio.length; i++) {
 			System.out.println((i + 1) + ". " + propiedadesMunicipio[i].getNombre() + "\n");
@@ -229,9 +250,9 @@ public class ClientePropiedades {
 
 		// Mostramos las propiedades que tengan como nombre Karrantza
 		System.out.println("Propiedades con nombre Karrantza:");
-		ObtenerPropiedadesPorNombre opron = new ObtenerPropiedadesPorNombre();
+		opron = new ObtenerPropiedadesPorNombre();
 		opron.setNombre("Karrantza");
-		ObtenerPropiedadesPorNombreResponse opronr = stub.obtenerPropiedadesPorNombre(opron);
+		opronr = stub.obtenerPropiedadesPorNombre(opron);
 		Propiedad[] propiedadesNombre = opronr.get_return();
 		for (int i = 0; i < propiedadesNombre.length; i++) {
 			System.out.println((i + 1) + ". " + propiedadesNombre[i].getNombre() + "\n");
@@ -241,7 +262,7 @@ public class ClientePropiedades {
 		for (int i = 0; i < propiedades.length; i++) {
 			if (propiedades[i].getNombre().equals("Terreno Madrid")) {
 				propiedades[i].setNombre("Terreno Madrid Editado");
-				EditarPropiedad epro = new EditarPropiedad();
+				epro = new EditarPropiedad();
 				epro.setP(propiedades[i]);
 				stub.editarPropiedad(epro);
 				System.out.println("La propiedad " + propiedades[i].getNombre() + " ha sido editada correctamente.\n");
@@ -251,7 +272,7 @@ public class ClientePropiedades {
 		// Borramos la propiedad de Vitoria
 		for (int i = 0; i < propiedades.length; i++) {
 			if (propiedades[i].getNombre().equals("Terreno Vitoria")) {
-				BorrarPropiedad bpro = new BorrarPropiedad();
+				bpro = new BorrarPropiedad();
 				bpro.setId(propiedades[i].getId());
 				stub.borrarPropiedad(bpro);
 				System.out.println("La propiedad " + propiedades[i].getNombre() + " ha sido borrada correctamente.\n");
