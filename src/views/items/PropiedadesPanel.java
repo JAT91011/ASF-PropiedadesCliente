@@ -15,15 +15,21 @@ import javax.swing.JTextField;
 public class PropiedadesPanel extends JPanel {
 
 	private static final long	serialVersionUID	= 5131759915996741639L;
+
+	public static int			MODE_EDIT			= 0;
+	public static int			MODE_VIEW			= 1;
+
 	private JTextField			txtId;
 	private JTextField			txtNombre;
 	private JTextField			txtAddress;
-	private JTextField			textField_3;
-	private JTextField			textField_4;
-	private JTextField			textField_5;
-	private JTextField			textField_6;
+	private JTextField			txtLatitud;
+	private JTextField			txtLongitud;
+	private JTextField			txtPrecio;
+	private JTextField			txtArea;
+	private JButton				btnCancelar;
+	private JButton				btnGuardar;
 
-	public PropiedadesPanel() {
+	public PropiedadesPanel(int mode) {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -110,13 +116,13 @@ public class PropiedadesPanel extends JPanel {
 		gbc_lblProvincia.gridy = 5;
 		add(lblProvincia, gbc_lblProvincia);
 
-		JComboBox comboBox = new JComboBox();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 2;
-		gbc_comboBox.gridy = 5;
-		add(comboBox, gbc_comboBox);
+		JComboBox cboProvincia = new JComboBox();
+		GridBagConstraints gbc_cboProvincia = new GridBagConstraints();
+		gbc_cboProvincia.insets = new Insets(0, 0, 5, 5);
+		gbc_cboProvincia.fill = GridBagConstraints.HORIZONTAL;
+		gbc_cboProvincia.gridx = 2;
+		gbc_cboProvincia.gridy = 5;
+		add(cboProvincia, gbc_cboProvincia);
 
 		JLabel lblLatitud = new JLabel("Latitud");
 		GridBagConstraints gbc_lblLatitud = new GridBagConstraints();
@@ -126,14 +132,14 @@ public class PropiedadesPanel extends JPanel {
 		gbc_lblLatitud.gridy = 6;
 		add(lblLatitud, gbc_lblLatitud);
 
-		textField_3 = new JTextField();
-		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
-		gbc_textField_3.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_3.gridx = 2;
-		gbc_textField_3.gridy = 6;
-		add(textField_3, gbc_textField_3);
-		textField_3.setColumns(10);
+		txtLatitud = new JTextField();
+		GridBagConstraints gbc_txtLatitud = new GridBagConstraints();
+		gbc_txtLatitud.anchor = GridBagConstraints.WEST;
+		gbc_txtLatitud.insets = new Insets(0, 0, 5, 5);
+		gbc_txtLatitud.gridx = 2;
+		gbc_txtLatitud.gridy = 6;
+		add(txtLatitud, gbc_txtLatitud);
+		txtLatitud.setColumns(10);
 
 		JLabel lblLongitud = new JLabel("Longitud");
 		GridBagConstraints gbc_lblLongitud = new GridBagConstraints();
@@ -143,14 +149,14 @@ public class PropiedadesPanel extends JPanel {
 		gbc_lblLongitud.gridy = 7;
 		add(lblLongitud, gbc_lblLongitud);
 
-		textField_4 = new JTextField();
-		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
-		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_4.gridx = 2;
-		gbc_textField_4.gridy = 7;
-		add(textField_4, gbc_textField_4);
-		textField_4.setColumns(10);
+		txtLongitud = new JTextField();
+		GridBagConstraints gbc_txtLongitud = new GridBagConstraints();
+		gbc_txtLongitud.anchor = GridBagConstraints.WEST;
+		gbc_txtLongitud.insets = new Insets(0, 0, 5, 5);
+		gbc_txtLongitud.gridx = 2;
+		gbc_txtLongitud.gridy = 7;
+		add(txtLongitud, gbc_txtLongitud);
+		txtLongitud.setColumns(10);
 
 		JLabel lblPrecio = new JLabel("Precio");
 		GridBagConstraints gbc_lblPrecio = new GridBagConstraints();
@@ -160,31 +166,31 @@ public class PropiedadesPanel extends JPanel {
 		gbc_lblPrecio.gridy = 8;
 		add(lblPrecio, gbc_lblPrecio);
 
-		textField_5 = new JTextField();
-		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_5.gridx = 2;
-		gbc_textField_5.gridy = 8;
-		add(textField_5, gbc_textField_5);
-		textField_5.setColumns(10);
+		txtPrecio = new JTextField();
+		GridBagConstraints gbc_txtPrecio = new GridBagConstraints();
+		gbc_txtPrecio.anchor = GridBagConstraints.WEST;
+		gbc_txtPrecio.insets = new Insets(0, 0, 5, 5);
+		gbc_txtPrecio.gridx = 2;
+		gbc_txtPrecio.gridy = 8;
+		add(txtPrecio, gbc_txtPrecio);
+		txtPrecio.setColumns(10);
 
-		JLabel lblrea = new JLabel("Área");
-		GridBagConstraints gbc_lblrea = new GridBagConstraints();
-		gbc_lblrea.anchor = GridBagConstraints.WEST;
-		gbc_lblrea.insets = new Insets(0, 0, 5, 5);
-		gbc_lblrea.gridx = 1;
-		gbc_lblrea.gridy = 9;
-		add(lblrea, gbc_lblrea);
+		JLabel lblArea = new JLabel("Área");
+		GridBagConstraints gbc_lblArea = new GridBagConstraints();
+		gbc_lblArea.anchor = GridBagConstraints.WEST;
+		gbc_lblArea.insets = new Insets(0, 0, 5, 5);
+		gbc_lblArea.gridx = 1;
+		gbc_lblArea.gridy = 9;
+		add(lblArea, gbc_lblArea);
 
-		textField_6 = new JTextField();
-		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
-		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_6.gridx = 2;
-		gbc_textField_6.gridy = 9;
-		add(textField_6, gbc_textField_6);
-		textField_6.setColumns(10);
+		txtArea = new JTextField();
+		GridBagConstraints gbc_txtArea = new GridBagConstraints();
+		gbc_txtArea.anchor = GridBagConstraints.WEST;
+		gbc_txtArea.insets = new Insets(0, 0, 5, 5);
+		gbc_txtArea.gridx = 2;
+		gbc_txtArea.gridy = 9;
+		add(txtArea, gbc_txtArea);
+		txtArea.setColumns(10);
 
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -196,12 +202,11 @@ public class PropiedadesPanel extends JPanel {
 		gbc_panel.gridy = 11;
 		add(panel, gbc_panel);
 
-		JButton btnCancel = new JButton("Cancelar");
-		panel.add(btnCancel);
+		btnCancelar = new JButton("Cancelar");
+		panel.add(btnCancelar);
 
-		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar = new JButton("Guardar");
 		panel.add(btnGuardar);
-
 	}
 
 }
