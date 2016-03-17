@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import entities.xsd.Propiedad;
 import entities.xsd.Provincia;
+import utilitiies.Axis2Manager;
 import views.Window;
 
 public class PropiedadesPanel extends JPanel {
@@ -128,7 +129,7 @@ public class PropiedadesPanel extends JPanel {
 
 		JLabel lblProvincia = new JLabel("Provincia");
 		GridBagConstraints gbc_lblProvincia = new GridBagConstraints();
-		gbc_lblProvincia.anchor = GridBagConstraints.EAST;
+		gbc_lblProvincia.anchor = GridBagConstraints.WEST;
 		gbc_lblProvincia.insets = new Insets(0, 0, 5, 5);
 		gbc_lblProvincia.gridx = 1;
 		gbc_lblProvincia.gridy = 5;
@@ -214,7 +215,7 @@ public class PropiedadesPanel extends JPanel {
 		setMode(mode, propiedad);
 	}
 
-	private void setMode(int mode, Propiedad propiedad) {
+	public void setMode(int mode, Propiedad propiedad) {
 
 		// Se habilitan o inhabilitan los controles
 		this.txtNombre.setEditable(mode != MODE_VIEW);
@@ -243,28 +244,35 @@ public class PropiedadesPanel extends JPanel {
 		}
 	}
 
-	public Propiedad obtenerPropiedad() {
+	public Propiedad obtenerPropiedad(Propiedad p) {
 		String provinciaText = txtProvincia.getText().trim();
 		if (this.vectorProvincias.contains(provinciaText)) {
-			// Se carga la propiedad con los valores del formulario y la
-			// devolvemos
 			Provincia provincia = new Provincia();
 			provincia.setNombre(provinciaText);
+			if (!Axis2Manager.getInstance().existeProvinciaConNombre(provinciaText)) {
+				Axis2Manager.getInstance().insertarProvincia(provincia);
+			}
+			provincia = Axis2Manager.getInstance().obtenerProvinciaPorNombre(provinciaText);
 
-			Propiedad propiedad = new Propiedad();
-			// propiedad.setId(Integer.parseInt(txtId.getText().trim()));
+			Propiedad propiedad = null;
+			if (p != null) {
+				propiedad = p;
+			} else {
+				propiedad = new Propiedad();
+			}
+
 			propiedad.setNombre(txtNombre.getText().trim());
 			propiedad.setDescripcion(txtDescripcion.getText().trim());
 			propiedad.setDireccion(txtDireccion.getText().trim());
 			propiedad.setProvincia(provincia);
 			propiedad.setLatitud(Float.parseFloat(txtLatitud.getText().trim()));
-			propiedad.setLatitud(Float.parseFloat(txtLongitud.getText().trim()));
+			propiedad.setLongitud(Float.parseFloat(txtLongitud.getText().trim()));
 			propiedad.setPrecio(Double.parseDouble(txtPrecio.getText().trim()));
 			propiedad.setArea(Double.parseDouble(txtArea.getText().trim()));
 
 			return propiedad;
 		} else {
-			JOptionPane.showMessageDialog(Window.getInstance(), "La provincia introducida no existe");
+			JOptionPane.showMessageDialog(Window.getInstance(), "La provincia introducida no existe", "Error", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 	}

@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import entities.xsd.Propiedad;
 import utilitiies.Axis2Manager;
 import utilitiies.FileChooser;
 import utilitiies.JAXBManager;
@@ -50,7 +51,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	private JLabel							lblNombre;
 	private JTextField						txtNombre;
 	private JLabel							lblProvincia;
-	private JTextField						textField;
+	private JTextField						txtProvincia;
 
 	private static String					provincias[]		= { "Alava", "Albacete", "Alicante", "Almería", "Asturias", "Avila", "Badajoz",
 			"Barcelona", "Burgos", "Cáceres", "Cádiz", "Cantabria", "Castellón", "Ciudad Real", "Córdoba", "La Coruña", "Cuenca", "Gerona", "Granada",
@@ -130,6 +131,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		btnRemove.setIcon(new ImageIcon("icons/remove-icon.png"));
 		btnRemove.setBackground(new Color(240, 128, 128));
 		btnRemove.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRemove.addActionListener(this);
 		btnRemove.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		GridBagConstraints gbc_btnRemove = new GridBagConstraints();
 		gbc_btnRemove.insets = new Insets(0, 0, 0, 2);
@@ -221,13 +223,13 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_lblProvincia.gridy = 2;
 		panelFilter.add(lblProvincia, gbc_lblProvincia);
 
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.anchor = GridBagConstraints.WEST;
-		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 2;
-		panelFilter.add(textField, gbc_textField);
-		textField.setColumns(20);
+		txtProvincia = new JTextField();
+		GridBagConstraints gbc_txtProvincia = new GridBagConstraints();
+		gbc_txtProvincia.anchor = GridBagConstraints.WEST;
+		gbc_txtProvincia.gridx = 2;
+		gbc_txtProvincia.gridy = 2;
+		panelFilter.add(txtProvincia, gbc_txtProvincia);
+		txtProvincia.setColumns(20);
 
 		btnFind = new JButton("BUSCAR");
 		btnFind.setIcon(new ImageIcon("icons/search-icon.png"));
@@ -298,22 +300,29 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 						Axis2Manager.getInstance().insertarPropiedad(propiedad);
 					} else {
 						JOptionPane.showMessageDialog(Window.getInstance(),
-								"La propiedad del XML con el nombre: " + p.getNombre() + " contiene una provincia inexistente en España");
+								"La propiedad del XML con el nombre: " + p.getNombre() + " contiene una provincia inexistente en España", "Error",
+								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 				}
-				JOptionPane.showMessageDialog(Window.getInstance(), "Las propiedades se han importado correctamente");
+				JOptionPane.showMessageDialog(Window.getInstance(), "Las propiedades se han importado correctamente", "Información",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else if (btnNew == e.getSource()) {
 			insertarPropiedad();
 		} else if (btnEdit == e.getSource()) {
-
+			// Editamos una propiedad a modo de prueba.
+			Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedades();
+			editarPropiedad(propiedades[0]);
 		} else if (btnRemove == e.getSource()) {
-
+			// Eliminamos una propiedad a modo de prueba.
+			Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedades();
+			eliminarPropiedad(propiedades[0].getId());
 		} else if (btnFind == e.getSource()) {
 			buscarPropiedades();
 		} else if (btnClear == e.getSource()) {
 			txtNombre.setText("");
+			txtProvincia.setText("");
 		}
 	}
 
@@ -332,9 +341,11 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			dialog.dispose();
 		} else {
 			// Al pulsar guardar
-			entities.xsd.Propiedad propiedad = p.obtenerPropiedad();
+			entities.xsd.Propiedad propiedad = p.obtenerPropiedad(null);
 			if (propiedad != null) {
-				// Se envia al servidor
+				Axis2Manager.getInstance().insertarPropiedad(propiedad);
+				JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha insertado correctamente", "Informacion",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}
@@ -354,6 +365,12 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			dialog.dispose();
 		} else {
 			// Al pulsar guardar
+			entities.xsd.Propiedad prop = p.obtenerPropiedad(propiedad);
+			if (prop != null) {
+				Axis2Manager.getInstance().editarPropiedad(prop);
+				JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha editado correctamente", "Informacion",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	}
 
@@ -373,13 +390,18 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	public void eliminarPropiedad() {
-
+	public void eliminarPropiedad(int id) {
+		Axis2Manager.getInstance().borrarPropiedad(id);
+		JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha eliminado correctamente", "Informacion",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void buscarPropiedades() {
 		String nombre = txtNombre.getText().trim();
-		entities.xsd.Provincia provincia = (entities.xsd.Provincia) cboProvincias.getSelectedItem();
+		String provincia = txtProvincia.getText().trim();
+
+		// entities.xsd.Provincia provincia = (entities.xsd.Provincia)
+		// cboProvincias.getSelectedItem();
 
 		// TODO Filtrar las propiedades
 	}
