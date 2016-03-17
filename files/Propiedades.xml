@@ -27,4 +27,17 @@
         </provincia>
     </propiedad>
     
+    <propiedad>
+        <nombre>Lupardika</nombre>
+        <descripcion>Casa rural de alquiler íntegro en Orduña dotada con calefacción, televisión, sala de estar y con cuna disponible.</descripcion>
+        <direccion>C/ Donibane, 11, Orduña</direccion>
+        <latitud>42.995375</latitud>
+        <longitud>-3.010556</longitud>
+        <area>380m2</area>
+        <precio>110.00</precio>
+        <provincia>
+            <nombre>Bizcaya</nombre>
+        </provincia>
+    </propiedad>
+    
 </propiedades>

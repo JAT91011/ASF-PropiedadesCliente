@@ -77,7 +77,7 @@ public class PropiedadesPanel extends JPanel {
 		add(txtNombre, gbc_txtNombre);
 		txtNombre.setColumns(10);
 
-		JLabel lblDescripcin = new JLabel("DescripciÃ³n");
+		JLabel lblDescripcin = new JLabel("Descripci\u00f3n");
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
 		gbc_lblDescripcin.anchor = GridBagConstraints.NORTHWEST;
 		gbc_lblDescripcin.insets = new Insets(0, 0, 5, 5);
@@ -96,7 +96,7 @@ public class PropiedadesPanel extends JPanel {
 		txtDescripcion = new JTextArea();
 		scrollPane.setViewportView(txtDescripcion);
 
-		JLabel lblDireccin = new JLabel("DirecciÃ³n");
+		JLabel lblDireccin = new JLabel("Direcci\u00f3n");
 		GridBagConstraints gbc_lblDireccin = new GridBagConstraints();
 		gbc_lblDireccin.anchor = GridBagConstraints.WEST;
 		gbc_lblDireccin.insets = new Insets(0, 0, 5, 5);
@@ -180,7 +180,7 @@ public class PropiedadesPanel extends JPanel {
 		add(txtPrecio, gbc_txtPrecio);
 		txtPrecio.setColumns(10);
 
-		JLabel lblArea = new JLabel("Ã�rea");
+		JLabel lblArea = new JLabel("\u00c1rea");
 		GridBagConstraints gbc_lblArea = new GridBagConstraints();
 		gbc_lblArea.anchor = GridBagConstraints.WEST;
 		gbc_lblArea.insets = new Insets(0, 0, 5, 5);
@@ -206,7 +206,6 @@ public class PropiedadesPanel extends JPanel {
 		this.txtNombre.setEditable(mode != MODE_VIEW);
 		this.txtDescripcion.setEditable(mode != MODE_VIEW);
 		this.txtDireccion.setEditable(mode != MODE_VIEW);
-		this.cboProvincia.setEditable(mode != MODE_VIEW);
 		this.txtLatitud.setEditable(mode != MODE_VIEW);
 		this.txtLongitud.setEditable(mode != MODE_VIEW);
 		this.txtPrecio.setEditable(mode != MODE_VIEW);
