@@ -52,6 +52,9 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	private JLabel								lblProvincia;
 	private JComboBox<entities.xsd.Provincia>	cboProvincias;
 
+	private Vector<entities.xsd.Provincia>		vectorProvincias;
+	private Vector<entities.xsd.Provincia>		vectorPropiedades
+
 	public PropiedadesListPanel() {
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -89,7 +92,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_btnImport.gridy = 0;
 		buttonsPanel.add(btnImport, gbc_btnImport);
 
-		btnNew = new JButton("AÃ±adir");
+		btnNew = new JButton("NUEVA");
 		btnNew.setFocusPainted(false);
 		btnNew.setIcon(new ImageIcon("icons/add-icon.png"));
 		btnNew.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -141,8 +144,8 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 
-		TableModel tableModel = new DefaultTableModel(new String[] { "ID", "Nombre", "DescripciÃ³n", "DirecciÃ³n", "Municipio", "Ã�rea", "Precio" },
-				6);
+		TableModel tableModel = new DefaultTableModel(
+				new String[] { "ID", "Nombre", "Descripci\u00f3n", "Direcci\u00f3n", "Municipio", "\u00c1rea", "Precio" }, 6);
 
 		tableContent = new JTable(tableModel);
 		tableContent.getTableHeader().setReorderingAllowed(false);
@@ -248,6 +251,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	public void loadData() {
 
 		// TODO Obtener todas las provincias
+		vectorProvincias = new Vector<entities.xsd.Provincia>();
 
 		// TODO Obtener las propiedades del servidor y cargar la tabla
 
