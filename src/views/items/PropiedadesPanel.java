@@ -3,9 +3,11 @@ package views.items;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Arrays;
+import java.util.Vector;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -13,6 +15,7 @@ import javax.swing.JTextField;
 
 import entities.xsd.Propiedad;
 import entities.xsd.Provincia;
+import views.Window;
 
 public class PropiedadesPanel extends JPanel {
 
@@ -27,13 +30,23 @@ public class PropiedadesPanel extends JPanel {
 	private JTextField			txtNombre;
 	private JTextArea			txtDescripcion;
 	private JTextField			txtDireccion;
-	private JComboBox<String>	cboProvincia;
 	private JTextField			txtLatitud;
 	private JTextField			txtLongitud;
 	private JTextField			txtPrecio;
 	private JTextField			txtArea;
+	private JTextField			txtProvincia;
+
+	private static String		provincias[]		= { "Alava", "Albacete", "Alicante", "Almería", "Asturias", "Avila", "Badajoz", "Barcelona",
+			"Burgos", "Cáceres", "Cádiz", "Cantabria", "Castellón", "Ciudad Real", "Córdoba", "La Coruña", "Cuenca", "Gerona", "Granada",
+			"Guadalajara", "Guipúzcoa", "Huelva", "Huesca", "Islas Baleares", "Jaén", "León", "Lérida", "Lugo", "Madrid", "Málaga", "Murcia",
+			"Navarra", "Orense", "Palencia", "Las Palmas", "Pontevedra", "La Rioja", "Salamanca", "Segovia", "Sevilla", "Soria", "Tarragona",
+			"Santa Cruz de Tenerife", "Teruel", "Toledo", "Valencia", "Valladolid", "Vizcaya", "Zamora", "Zaragoza" };
+
+	private Vector<String>		vectorProvincias;
 
 	public PropiedadesPanel(int mode, Propiedad propiedad) {
+
+		this.vectorProvincias = new Vector<String>(Arrays.asList(provincias));
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0 };
@@ -77,7 +90,7 @@ public class PropiedadesPanel extends JPanel {
 		add(txtNombre, gbc_txtNombre);
 		txtNombre.setColumns(10);
 
-		JLabel lblDescripcin = new JLabel("DescripciÃ³n");
+		JLabel lblDescripcin = new JLabel("Descripci\u00f3n");
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
 		gbc_lblDescripcin.anchor = GridBagConstraints.NORTHWEST;
 		gbc_lblDescripcin.insets = new Insets(0, 0, 5, 5);
@@ -96,7 +109,7 @@ public class PropiedadesPanel extends JPanel {
 		txtDescripcion = new JTextArea();
 		scrollPane.setViewportView(txtDescripcion);
 
-		JLabel lblDireccin = new JLabel("DirecciÃ³n");
+		JLabel lblDireccin = new JLabel("Direcci\u00f3n");
 		GridBagConstraints gbc_lblDireccin = new GridBagConstraints();
 		gbc_lblDireccin.anchor = GridBagConstraints.WEST;
 		gbc_lblDireccin.insets = new Insets(0, 0, 5, 5);
@@ -115,19 +128,20 @@ public class PropiedadesPanel extends JPanel {
 
 		JLabel lblProvincia = new JLabel("Provincia");
 		GridBagConstraints gbc_lblProvincia = new GridBagConstraints();
-		gbc_lblProvincia.anchor = GridBagConstraints.WEST;
+		gbc_lblProvincia.anchor = GridBagConstraints.EAST;
 		gbc_lblProvincia.insets = new Insets(0, 0, 5, 5);
 		gbc_lblProvincia.gridx = 1;
 		gbc_lblProvincia.gridy = 5;
 		add(lblProvincia, gbc_lblProvincia);
 
-		cboProvincia = new JComboBox<String>();
-		GridBagConstraints gbc_cboProvincia = new GridBagConstraints();
-		gbc_cboProvincia.insets = new Insets(0, 0, 5, 5);
-		gbc_cboProvincia.fill = GridBagConstraints.HORIZONTAL;
-		gbc_cboProvincia.gridx = 2;
-		gbc_cboProvincia.gridy = 5;
-		add(cboProvincia, gbc_cboProvincia);
+		txtProvincia = new JTextField();
+		GridBagConstraints gbc_txtProvincia = new GridBagConstraints();
+		gbc_txtProvincia.insets = new Insets(0, 0, 5, 5);
+		gbc_txtProvincia.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtProvincia.gridx = 2;
+		gbc_txtProvincia.gridy = 5;
+		add(txtProvincia, gbc_txtProvincia);
+		txtProvincia.setColumns(10);
 
 		JLabel lblLatitud = new JLabel("Latitud");
 		GridBagConstraints gbc_lblLatitud = new GridBagConstraints();
@@ -180,7 +194,7 @@ public class PropiedadesPanel extends JPanel {
 		add(txtPrecio, gbc_txtPrecio);
 		txtPrecio.setColumns(10);
 
-		JLabel lblArea = new JLabel("Ã�rea");
+		JLabel lblArea = new JLabel("\u00c1rea");
 		GridBagConstraints gbc_lblArea = new GridBagConstraints();
 		gbc_lblArea.anchor = GridBagConstraints.WEST;
 		gbc_lblArea.insets = new Insets(0, 0, 5, 5);
@@ -206,7 +220,6 @@ public class PropiedadesPanel extends JPanel {
 		this.txtNombre.setEditable(mode != MODE_VIEW);
 		this.txtDescripcion.setEditable(mode != MODE_VIEW);
 		this.txtDireccion.setEditable(mode != MODE_VIEW);
-		this.cboProvincia.setEditable(mode != MODE_VIEW);
 		this.txtLatitud.setEditable(mode != MODE_VIEW);
 		this.txtLongitud.setEditable(mode != MODE_VIEW);
 		this.txtPrecio.setEditable(mode != MODE_VIEW);
@@ -218,7 +231,7 @@ public class PropiedadesPanel extends JPanel {
 			this.txtNombre.setText(propiedad.getNombre());
 			this.txtDescripcion.setText(propiedad.getDescripcion());
 			this.txtDireccion.setText(propiedad.getDireccion());
-			this.cboProvincia.setSelectedItem(propiedad.getProvincia());
+			this.txtProvincia.setText(propiedad.getProvincia().getNombre());
 			this.txtLatitud.setText(Float.toString(propiedad.getLatitud()));
 			this.txtLongitud.setText(Float.toString(propiedad.getLongitud()));
 			this.txtPrecio.setText(Double.toString(propiedad.getPrecio()));
@@ -230,20 +243,29 @@ public class PropiedadesPanel extends JPanel {
 		}
 	}
 
-	private Propiedad obtenerPropiedad() {
+	public Propiedad obtenerPropiedad() {
+		String provinciaText = txtProvincia.getText().trim();
+		if (this.vectorProvincias.contains(provinciaText)) {
+			// Se carga la propiedad con los valores del formulario y la
+			// devolvemos
+			Provincia provincia = new Provincia();
+			provincia.setNombre(provinciaText);
 
-		// Se carga la propiedad con los valores del formulario y la devolvemos
-		Propiedad propiedad = new Propiedad();
-		// propiedad.setId(Integer.parseInt(txtId.getText().trim()));
-		propiedad.setNombre(txtNombre.getText().trim());
-		propiedad.setDescripcion(txtDescripcion.getText().trim());
-		propiedad.setDireccion(txtDireccion.getText().trim());
-		propiedad.setProvincia((Provincia) cboProvincia.getSelectedItem());
-		propiedad.setLatitud(Float.parseFloat(txtLatitud.getText().trim()));
-		propiedad.setLatitud(Float.parseFloat(txtLongitud.getText().trim()));
-		propiedad.setPrecio(Double.parseDouble(txtPrecio.getText().trim()));
-		propiedad.setArea(Double.parseDouble(txtArea.getText().trim()));
+			Propiedad propiedad = new Propiedad();
+			// propiedad.setId(Integer.parseInt(txtId.getText().trim()));
+			propiedad.setNombre(txtNombre.getText().trim());
+			propiedad.setDescripcion(txtDescripcion.getText().trim());
+			propiedad.setDireccion(txtDireccion.getText().trim());
+			propiedad.setProvincia(provincia);
+			propiedad.setLatitud(Float.parseFloat(txtLatitud.getText().trim()));
+			propiedad.setLatitud(Float.parseFloat(txtLongitud.getText().trim()));
+			propiedad.setPrecio(Double.parseDouble(txtPrecio.getText().trim()));
+			propiedad.setArea(Double.parseDouble(txtArea.getText().trim()));
 
-		return propiedad;
+			return propiedad;
+		} else {
+			JOptionPane.showMessageDialog(Window.getInstance(), "La provincia introducida no existe");
+			return null;
+		}
 	}
 }

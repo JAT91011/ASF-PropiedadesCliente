@@ -11,11 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,24 +35,34 @@ import views.items.PropiedadesPanel;
 
 public class PropiedadesListPanel extends JPanel implements ActionListener {
 
-	private static final long					serialVersionUID	= 5253268925767443459L;
-	private JTable								tableContent;
+	private static final long				serialVersionUID	= 5253268925767443459L;
+	private JTable							tableContent;
 
-	private Vector<entities.xsd.Propiedad>		propiedades;
+	private Vector<entities.xsd.Propiedad>	vectorPropiedades;
 
-	private JButton								btnImport;
-	private JButton								btnNew;
-	private JButton								btnEdit;
+	private JButton							btnImport;
+	private JButton							btnNew;
+	private JButton							btnEdit;
 
-	private JButton								btnFind;
-	private JButton								btnClear;
-	private JButton								btnRemove;
-	private JLabel								lblNombre;
-	private JTextField							txtNombre;
-	private JLabel								lblProvincia;
-	private JComboBox<entities.xsd.Provincia>	cboProvincias;
+	private JButton							btnFind;
+	private JButton							btnClear;
+	private JButton							btnRemove;
+	private JLabel							lblNombre;
+	private JTextField						txtNombre;
+	private JLabel							lblProvincia;
+	private JTextField						textField;
+
+	private static String					provincias[]		= { "Alava", "Albacete", "Alicante", "Almería", "Asturias", "Avila", "Badajoz",
+			"Barcelona", "Burgos", "Cáceres", "Cádiz", "Cantabria", "Castellón", "Ciudad Real", "Córdoba", "La Coruña", "Cuenca", "Gerona", "Granada",
+			"Guadalajara", "Guipúzcoa", "Huelva", "Huesca", "Islas Baleares", "Jaén", "León", "Lérida", "Lugo", "Madrid", "Málaga", "Murcia",
+			"Navarra", "Orense", "Palencia", "Las Palmas", "Pontevedra", "La Rioja", "Salamanca", "Segovia", "Sevilla", "Soria", "Tarragona",
+			"Santa Cruz de Tenerife", "Teruel", "Toledo", "Valencia", "Valladolid", "Vizcaya", "Zamora", "Zaragoza" };
+
+	private Vector<String>					vectorProvincias;
 
 	public PropiedadesListPanel() {
+
+		this.vectorProvincias = new Vector<String>(Arrays.asList(provincias));
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0 };
@@ -89,7 +99,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_btnImport.gridy = 0;
 		buttonsPanel.add(btnImport, gbc_btnImport);
 
-		btnNew = new JButton("AÃ±adir");
+		btnNew = new JButton("Nueva");
 		btnNew.setFocusPainted(false);
 		btnNew.setIcon(new ImageIcon("icons/add-icon.png"));
 		btnNew.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -141,8 +151,8 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 
-		TableModel tableModel = new DefaultTableModel(new String[] { "ID", "Nombre", "DescripciÃ³n", "DirecciÃ³n", "Municipio", "Ã�rea", "Precio" },
-				6);
+		TableModel tableModel = new DefaultTableModel(
+				new String[] { "ID", "Nombre", "Descripci\u00f3n", "Direcci\u00f3n", "Municipio", "\u00c1rea", "Precio" }, 6);
 
 		tableContent = new JTable(tableModel);
 		tableContent.getTableHeader().setReorderingAllowed(false);
@@ -182,7 +192,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		GridBagLayout gbl_panelFilter = new GridBagLayout();
 		gbl_panelFilter.columnWidths = new int[] { 10, 0, 0, 0 };
 		gbl_panelFilter.rowHeights = new int[] { 10, 0, 0, 0 };
-		gbl_panelFilter.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelFilter.columnWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_panelFilter.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelFilter.setLayout(gbl_panelFilter);
 
@@ -211,12 +221,13 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_lblProvincia.gridy = 2;
 		panelFilter.add(lblProvincia, gbc_lblProvincia);
 
-		cboProvincias = new JComboBox<entities.xsd.Provincia>();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 2;
-		gbc_comboBox.gridy = 2;
-		panelFilter.add(cboProvincias, gbc_comboBox);
+		textField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.anchor = GridBagConstraints.WEST;
+		gbc_textField.gridx = 2;
+		gbc_textField.gridy = 2;
+		panelFilter.add(textField, gbc_textField);
+		textField.setColumns(20);
 
 		btnFind = new JButton("BUSCAR");
 		btnFind.setIcon(new ImageIcon("icons/search-icon.png"));
@@ -246,11 +257,13 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	}
 
 	public void loadData() {
-
-		// TODO Obtener todas las provincias
-
 		// TODO Obtener las propiedades del servidor y cargar la tabla
-
+		entities.xsd.Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedades();
+		this.vectorPropiedades = new Vector<entities.xsd.Propiedad>();
+		for (entities.xsd.Propiedad p : propiedades) {
+			this.vectorPropiedades.addElement(p);
+		}
+		System.out.println("Se han cargado: " + this.vectorPropiedades.size() + " propiedades");
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -261,30 +274,35 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 				ArrayList<entities.Propiedad> properties = JAXBManager.getInstance().importProperties(xmlFile.getAbsolutePath());
 				System.out.println("Propiedades a importar: " + properties.size());
 				for (entities.Propiedad p : properties) {
-					System.out.println(p.getDescripcion());
-					entities.xsd.Propiedad propiedad = JAXBManager.getInstance().parsePropiedad(p);
+					// Se comprueba que la provincia sea correcta
+					if (this.vectorProvincias.contains(p.getProvincia().getNombre())) {
+						entities.xsd.Propiedad propiedad = JAXBManager.getInstance().parsePropiedad(p);
 
-					// Comprobamos a ver si existe la provincia de la propiedad
-					// y en caso de que
-					// no exista la insertamos en la base de datos.
-					if (!Axis2Manager.getInstance().existeProvinciaConNombre(propiedad.getProvincia().getNombre())) {
-						Axis2Manager.getInstance().insertarProvincia(propiedad.getProvincia());
+						if (!Axis2Manager.getInstance().existeProvinciaConNombre(propiedad.getProvincia().getNombre())) {
+							Axis2Manager.getInstance().insertarProvincia(propiedad.getProvincia());
+						}
+						// Almacenamos en una variable la provincia existente
+						// (con
+						// el id que se le
+						// asigna de forma autonumérica en la base de datos al
+						// insertarla).
+						entities.xsd.Provincia provincia = Axis2Manager.getInstance().obtenerProvinciaPorNombre(propiedad.getProvincia().getNombre());
+
+						// Le cambiamos la provincia a la propiedad por la que
+						// tiene
+						// un id por estar
+						// insertada en la base de datos.
+						propiedad.setProvincia(provincia);
+
+						// Insertamos la propiedad en la base de datos.
+						Axis2Manager.getInstance().insertarPropiedad(propiedad);
+					} else {
+						JOptionPane.showMessageDialog(Window.getInstance(),
+								"La propiedad del XML con el nombre: " + p.getNombre() + " contiene una provincia inexistente en España");
+						return;
 					}
-					// Almacenamos en una variable la provincia existente (con
-					// el id que se le
-					// asigna de forma autonumérica en la base de datos al
-					// insertarla).
-					entities.xsd.Provincia provincia = Axis2Manager.getInstance().obtenerProvinciaPorNombre(propiedad.getProvincia().getNombre());
-
-					// Le cambiamos la provincia a la propiedad por la que tiene
-					// un id por estar
-					// insertada en la base de datos.
-					propiedad.setProvincia(provincia);
-
-					// Insertamos la propiedad en la base de datos.
-					Axis2Manager.getInstance().insertarPropiedad(propiedad);
-					System.out.println("Propiedad insertada correctamente.");
 				}
+				JOptionPane.showMessageDialog(Window.getInstance(), "Las propiedades se han importado correctamente");
 			}
 		} else if (btnNew == e.getSource()) {
 			insertarPropiedad();
@@ -296,7 +314,6 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			buscarPropiedades();
 		} else if (btnClear == e.getSource()) {
 			txtNombre.setText("");
-			cboProvincias.setSelectedIndex(0);
 		}
 	}
 
@@ -315,6 +332,10 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			dialog.dispose();
 		} else {
 			// Al pulsar guardar
+			entities.xsd.Propiedad propiedad = p.obtenerPropiedad();
+			if (propiedad != null) {
+				// Se envia al servidor
+			}
 		}
 	}
 
