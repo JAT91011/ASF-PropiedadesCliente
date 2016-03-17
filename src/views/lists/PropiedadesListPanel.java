@@ -89,7 +89,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_btnImport.gridy = 0;
 		buttonsPanel.add(btnImport, gbc_btnImport);
 
-		btnNew = new JButton("Nuevo");
+		btnNew = new JButton("AÃ±adir");
 		btnNew.setFocusPainted(false);
 		btnNew.setIcon(new ImageIcon("icons/add-icon.png"));
 		btnNew.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -141,8 +141,8 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 
-		TableModel tableModel = new DefaultTableModel(
-				new String[] { "ID", "Nombre", "Descripci\u00f3n", "Direcci\u00f3n", "Provincia", "\u00c1rea", "Precio" }, 6);
+		TableModel tableModel = new DefaultTableModel(new String[] { "ID", "Nombre", "DescripciÃ³n", "DirecciÃ³n", "Municipio", "Ã�rea", "Precio" },
+				6);
 
 		tableContent = new JTable(tableModel);
 		tableContent.getTableHeader().setReorderingAllowed(false);
@@ -243,11 +243,10 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_btnClear.gridx = 1;
 		gbc_btnClear.gridy = 2;
 		panBottom.add(btnClear, gbc_btnClear);
-
-		loadData();
 	}
 
-	private void loadData() {
+	public void loadData() {
+
 		// TODO Obtener todas las provincias
 
 		// TODO Obtener las propiedades del servidor y cargar la tabla
@@ -260,12 +259,30 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			if (xmlFile != null && xmlFile.exists()) {
 				System.out.println(xmlFile.getAbsolutePath());
 				ArrayList<entities.Propiedad> properties = JAXBManager.getInstance().importProperties(xmlFile.getAbsolutePath());
+				System.out.println("Propiedades a importar: " + properties.size());
 				for (entities.Propiedad p : properties) {
-					// Se parsea la propiedad
+					System.out.println(p.getDescripcion());
 					entities.xsd.Propiedad propiedad = JAXBManager.getInstance().parsePropiedad(p);
+
+					// Comprobamos a ver si existe la provincia de la propiedad
+					// y en caso de que
+					// no exista la insertamos en la base de datos.
+					if (!Axis2Manager.getInstance().existeProvinciaConNombre(propiedad.getProvincia().getNombre())) {
+						Axis2Manager.getInstance().insertarProvincia(propiedad.getProvincia());
+					}
+					// Almacenamos en una variable la provincia existente (con
+					// el id que se le
+					// asigna de forma autonumérica en la base de datos al
+					// insertarla).
+					entities.xsd.Provincia provincia = Axis2Manager.getInstance().obtenerProvinciaPorNombre(propiedad.getProvincia().getNombre());
+
+					// Le cambiamos la provincia a la propiedad por la que tiene
+					// un id por estar
+					// insertada en la base de datos.
+					propiedad.setProvincia(provincia);
+
 					// Insertamos la propiedad en la base de datos.
-					String result = Axis2Manager.getInstance().insertarPropiedad(propiedad);
-					// TODO Comprobar si esta mal
+					Axis2Manager.getInstance().insertarPropiedad(propiedad);
 					System.out.println("Propiedad insertada correctamente.");
 				}
 			}
