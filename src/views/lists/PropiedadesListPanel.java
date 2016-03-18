@@ -404,6 +404,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 				Axis2Manager.getInstance().insertarPropiedad(propiedad);
 				JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha insertado correctamente", "Informacion",
 						JOptionPane.INFORMATION_MESSAGE);
+				loadData();
 			}
 		}
 	}
@@ -428,6 +429,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 				Axis2Manager.getInstance().editarPropiedad(prop);
 				JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha editado correctamente", "Informacion",
 						JOptionPane.INFORMATION_MESSAGE);
+				loadData();
 			}
 		}
 	}
@@ -452,6 +454,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		Axis2Manager.getInstance().borrarPropiedad(id);
 		JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha eliminado correctamente", "Informacion",
 				JOptionPane.INFORMATION_MESSAGE);
+		loadData();
 	}
 
 	public void buscarPropiedades() {
