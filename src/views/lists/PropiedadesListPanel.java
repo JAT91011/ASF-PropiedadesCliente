@@ -54,8 +54,6 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	private JButton							btnRemove;
 	private JLabel							lblNombre;
 	private JTextField						txtNombre;
-	private JLabel							lblProvincia;
-	private JTextField						txtProvincia;
 
 	private static String					provincias[]		= { "Alava", "Albacete", "Alicante", "Almería", "Asturias", "Avila", "Badajoz",
 			"Barcelona", "Burgos", "Cáceres", "Cádiz", "Cantabria", "Castellón", "Ciudad Real", "Córdoba", "La Coruña", "Cuenca", "Gerona", "Granada",
@@ -157,7 +155,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 
-		header = new String[4];
+		header = new String[7];
 		header[0] = "ID";
 		header[1] = "Nombre";
 		header[2] = "Descripci\u00f3n";
@@ -214,9 +212,9 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		panBottom.add(panelFilter, gbc_panelFilter);
 		GridBagLayout gbl_panelFilter = new GridBagLayout();
 		gbl_panelFilter.columnWidths = new int[] { 10, 0, 0, 0 };
-		gbl_panelFilter.rowHeights = new int[] { 10, 0, 0, 0 };
+		gbl_panelFilter.rowHeights = new int[] { 10, 0, 0 };
 		gbl_panelFilter.columnWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panelFilter.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelFilter.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
 		panelFilter.setLayout(gbl_panelFilter);
 
 		lblNombre = new JLabel("Nombre");
@@ -235,22 +233,6 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_txtNombre.gridy = 1;
 		panelFilter.add(txtNombre, gbc_txtNombre);
 		txtNombre.setColumns(20);
-
-		lblProvincia = new JLabel("Provincia");
-		GridBagConstraints gbc_lblProvincia = new GridBagConstraints();
-		gbc_lblProvincia.anchor = GridBagConstraints.WEST;
-		gbc_lblProvincia.insets = new Insets(0, 0, 0, 5);
-		gbc_lblProvincia.gridx = 1;
-		gbc_lblProvincia.gridy = 2;
-		panelFilter.add(lblProvincia, gbc_lblProvincia);
-
-		txtProvincia = new JTextField();
-		GridBagConstraints gbc_txtProvincia = new GridBagConstraints();
-		gbc_txtProvincia.anchor = GridBagConstraints.WEST;
-		gbc_txtProvincia.gridx = 2;
-		gbc_txtProvincia.gridy = 2;
-		panelFilter.add(txtProvincia, gbc_txtProvincia);
-		txtProvincia.setColumns(20);
 
 		btnFind = new JButton("BUSCAR");
 		btnFind.setIcon(new ImageIcon("icons/search-icon.png"));
@@ -319,6 +301,42 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 
 	}
 
+	public void loadDataByName(String nombre) {
+		// TODO Obtener las propiedades del servidor y cargar la tabla
+		entities.xsd.Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedadesPorNombre(nombre);
+		if (propiedades.length > 0) {
+			this.vectorPropiedades = new Vector<entities.xsd.Propiedad>();
+			modelTable.setDataVector(new String[propiedades.length][header.length], header);
+			for (int i = 0; i < propiedades.length; i++) {
+				this.vectorPropiedades.addElement(propiedades[i]);
+
+				header[1] = "Nombre";
+				header[2] = "Descripci\u00f3n";
+				header[3] = "Direcci\u00f3n";
+				header[4] = "Provincia";
+				header[5] = "\u00c1rea";
+				header[6] = "Precio";
+				// ID
+				tableContent.getModel().setValueAt(Integer.toString(propiedades[i].getId()), i, 0);
+				// NOMBRE
+				tableContent.getModel().setValueAt(propiedades[i].getNombre(), i, 1);
+				// DESCRIPCION
+				tableContent.getModel().setValueAt(propiedades[i].getDescripcion(), i, 2);
+				// DIRECCION
+				tableContent.getModel().setValueAt(propiedades[i].getDireccion(), i, 3);
+				// PROVINCIA
+				tableContent.getModel().setValueAt(propiedades[i].getProvincia().getNombre(), i, 4);
+				// AREA
+				tableContent.getModel().setValueAt(Double.toString(propiedades[i].getArea()), i, 5);
+				// PRECIO
+				tableContent.getModel().setValueAt(Double.toString(propiedades[i].getPrecio()), i, 6);
+			}
+			System.out.println("Se han cargado: " + this.vectorPropiedades.size() + " propiedades");
+		} else {
+			System.out.println("No se ha cargado ninguna propiedad");
+		}
+	}
+
 	public void actionPerformed(ActionEvent e) {
 		if (btnImport == e.getSource()) {
 			File xmlFile = FileChooser.openFile("Ficheros XML", "files/", "xml");
@@ -358,6 +376,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 				}
 				JOptionPane.showMessageDialog(Window.getInstance(), "Las propiedades se han importado correctamente", "Información",
 						JOptionPane.INFORMATION_MESSAGE);
+				loadData();
 			}
 		} else if (btnNew == e.getSource()) {
 			insertarPropiedad();
@@ -380,7 +399,6 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			buscarPropiedades();
 		} else if (btnClear == e.getSource()) {
 			txtNombre.setText("");
-			txtProvincia.setText("");
 		}
 	}
 
@@ -399,7 +417,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			dialog.dispose();
 		} else {
 			// Al pulsar guardar
-			entities.xsd.Propiedad propiedad = p.obtenerPropiedad(null);
+			entities.xsd.Propiedad propiedad = p.obtenerPropiedad();
 			if (propiedad != null) {
 				Axis2Manager.getInstance().insertarPropiedad(propiedad);
 				JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha insertado correctamente", "Informacion",
@@ -424,7 +442,7 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			dialog.dispose();
 		} else {
 			// Al pulsar guardar
-			entities.xsd.Propiedad prop = p.obtenerPropiedad(propiedad);
+			entities.xsd.Propiedad prop = p.obtenerPropiedad();
 			if (prop != null) {
 				Axis2Manager.getInstance().editarPropiedad(prop);
 				JOptionPane.showMessageDialog(Window.getInstance(), "La propiedad se ha editado correctamente", "Informacion",
@@ -459,11 +477,11 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 
 	public void buscarPropiedades() {
 		String nombre = txtNombre.getText().trim();
-		String provincia = txtProvincia.getText().trim();
+		if (nombre.isEmpty()) {
+			loadData();
+		} else {
+			loadDataByName(nombre);
+		}
 
-		// entities.xsd.Provincia provincia = (entities.xsd.Provincia)
-		// cboProvincias.getSelectedItem();
-
-		// TODO Filtrar las propiedades
 	}
 }

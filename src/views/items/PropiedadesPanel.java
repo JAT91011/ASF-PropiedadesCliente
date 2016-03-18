@@ -64,10 +64,10 @@ public class PropiedadesPanel extends JPanel {
 		gbc_lblId.gridy = 1;
 		add(lblId, gbc_lblId);
 
-		txtId = new JTextField();
+		txtId = new JTextField(0);
 		txtId.setEnabled(false);
 		GridBagConstraints gbc_txtId = new GridBagConstraints();
-		gbc_txtId.anchor = GridBagConstraints.WEST;
+		gbc_txtId.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtId.insets = new Insets(0, 0, 5, 5);
 		gbc_txtId.gridx = 2;
 		gbc_txtId.gridy = 1;
@@ -154,7 +154,7 @@ public class PropiedadesPanel extends JPanel {
 
 		txtLatitud = new JTextField();
 		GridBagConstraints gbc_txtLatitud = new GridBagConstraints();
-		gbc_txtLatitud.anchor = GridBagConstraints.WEST;
+		gbc_txtLatitud.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtLatitud.insets = new Insets(0, 0, 5, 5);
 		gbc_txtLatitud.gridx = 2;
 		gbc_txtLatitud.gridy = 6;
@@ -171,7 +171,7 @@ public class PropiedadesPanel extends JPanel {
 
 		txtLongitud = new JTextField();
 		GridBagConstraints gbc_txtLongitud = new GridBagConstraints();
-		gbc_txtLongitud.anchor = GridBagConstraints.WEST;
+		gbc_txtLongitud.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtLongitud.insets = new Insets(0, 0, 5, 5);
 		gbc_txtLongitud.gridx = 2;
 		gbc_txtLongitud.gridy = 7;
@@ -188,7 +188,7 @@ public class PropiedadesPanel extends JPanel {
 
 		txtPrecio = new JTextField();
 		GridBagConstraints gbc_txtPrecio = new GridBagConstraints();
-		gbc_txtPrecio.anchor = GridBagConstraints.WEST;
+		gbc_txtPrecio.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtPrecio.insets = new Insets(0, 0, 5, 5);
 		gbc_txtPrecio.gridx = 2;
 		gbc_txtPrecio.gridy = 8;
@@ -205,7 +205,7 @@ public class PropiedadesPanel extends JPanel {
 
 		txtArea = new JTextField();
 		GridBagConstraints gbc_txtArea = new GridBagConstraints();
-		gbc_txtArea.anchor = GridBagConstraints.WEST;
+		gbc_txtArea.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtArea.insets = new Insets(0, 0, 5, 5);
 		gbc_txtArea.gridx = 2;
 		gbc_txtArea.gridy = 9;
@@ -228,7 +228,7 @@ public class PropiedadesPanel extends JPanel {
 
 		// Se cargan los datos si estamos en modo editable
 		if (mode != MODE_NEW) {
-			// this.txtId.setText(propiedad.getId());
+			this.txtId.setText(Integer.toString(propiedad.getId()));
 			this.txtNombre.setText(propiedad.getNombre());
 			this.txtDescripcion.setText(propiedad.getDescripcion());
 			this.txtDireccion.setText(propiedad.getDireccion());
@@ -244,7 +244,7 @@ public class PropiedadesPanel extends JPanel {
 		}
 	}
 
-	public Propiedad obtenerPropiedad(Propiedad p) {
+	public Propiedad obtenerPropiedad() {
 		String provinciaText = txtProvincia.getText().trim();
 		if (this.vectorProvincias.contains(provinciaText)) {
 			Provincia provincia = new Provincia();
@@ -254,13 +254,8 @@ public class PropiedadesPanel extends JPanel {
 			}
 			provincia = Axis2Manager.getInstance().obtenerProvinciaPorNombre(provinciaText);
 
-			Propiedad propiedad = null;
-			if (p != null) {
-				propiedad = p;
-			} else {
-				propiedad = new Propiedad();
-			}
-
+			Propiedad propiedad = new Propiedad();
+			propiedad.setId(Integer.parseInt(txtId.getText().trim()));
 			propiedad.setNombre(txtNombre.getText().trim());
 			propiedad.setDescripcion(txtDescripcion.getText().trim());
 			propiedad.setDireccion(txtDireccion.getText().trim());
