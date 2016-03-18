@@ -7,8 +7,11 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,9 +28,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
-import entities.xsd.Propiedad;
 import utilitiies.Axis2Manager;
 import utilitiies.FileChooser;
 import utilitiies.JAXBManager;
@@ -37,6 +38,9 @@ import views.items.PropiedadesPanel;
 public class PropiedadesListPanel extends JPanel implements ActionListener {
 
 	private static final long				serialVersionUID	= 5253268925767443459L;
+
+	private String[]						header;
+	private final DefaultTableModel			modelTable;
 	private JTable							tableContent;
 
 	private Vector<entities.xsd.Propiedad>	vectorPropiedades;
@@ -153,10 +157,18 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 
-		TableModel tableModel = new DefaultTableModel(
-				new String[] { "ID", "Nombre", "Descripci\u00f3n", "Direcci\u00f3n", "Municipio", "\u00c1rea", "Precio" }, 6);
+		header = new String[4];
+		header[0] = "ID";
+		header[1] = "Nombre";
+		header[2] = "Descripci\u00f3n";
+		header[3] = "Direcci\u00f3n";
+		header[4] = "Provincia";
+		header[5] = "\u00c1rea";
+		header[6] = "Precio";
 
-		tableContent = new JTable(tableModel);
+		modelTable = new DefaultTableModel(header, 0);
+
+		tableContent = new JTable(modelTable);
 		tableContent.getTableHeader().setReorderingAllowed(false);
 		tableContent.setDragEnabled(false);
 		tableContent.setSelectionForeground(Color.WHITE);
@@ -165,6 +177,15 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		tableContent.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		tableContent.setRowHeight(20);
 		tableContent.getTableHeader().setFont(new Font("Arial", Font.PLAIN, 15));
+		tableContent.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent me) {
+				Point p = me.getPoint();
+				int row = tableContent.rowAtPoint(p);
+				if (me.getClickCount() == 2) {
+					verPropiedad(vectorPropiedades.get(row));
+				}
+			}
+		});
 
 		scrollPane.setViewportView(tableContent);
 
@@ -256,16 +277,46 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		gbc_btnClear.gridx = 1;
 		gbc_btnClear.gridy = 2;
 		panBottom.add(btnClear, gbc_btnClear);
+
+		// Se piden las propiedades
+		loadData();
 	}
 
 	public void loadData() {
 		// TODO Obtener las propiedades del servidor y cargar la tabla
 		entities.xsd.Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedades();
-		this.vectorPropiedades = new Vector<entities.xsd.Propiedad>();
-		for (entities.xsd.Propiedad p : propiedades) {
-			this.vectorPropiedades.addElement(p);
+		if (propiedades.length > 0) {
+			this.vectorPropiedades = new Vector<entities.xsd.Propiedad>();
+			modelTable.setDataVector(new String[propiedades.length][header.length], header);
+			for (int i = 0; i < propiedades.length; i++) {
+				this.vectorPropiedades.addElement(propiedades[i]);
+
+				header[1] = "Nombre";
+				header[2] = "Descripci\u00f3n";
+				header[3] = "Direcci\u00f3n";
+				header[4] = "Provincia";
+				header[5] = "\u00c1rea";
+				header[6] = "Precio";
+				// ID
+				tableContent.getModel().setValueAt(Integer.toString(propiedades[i].getId()), i, 0);
+				// NOMBRE
+				tableContent.getModel().setValueAt(propiedades[i].getNombre(), i, 1);
+				// DESCRIPCION
+				tableContent.getModel().setValueAt(propiedades[i].getDescripcion(), i, 2);
+				// DIRECCION
+				tableContent.getModel().setValueAt(propiedades[i].getDireccion(), i, 3);
+				// PROVINCIA
+				tableContent.getModel().setValueAt(propiedades[i].getProvincia().getNombre(), i, 4);
+				// AREA
+				tableContent.getModel().setValueAt(Double.toString(propiedades[i].getArea()), i, 5);
+				// PRECIO
+				tableContent.getModel().setValueAt(Double.toString(propiedades[i].getPrecio()), i, 6);
+			}
+			System.out.println("Se han cargado: " + this.vectorPropiedades.size() + " propiedades");
+		} else {
+			System.out.println("No se ha cargado ninguna propiedad");
 		}
-		System.out.println("Se han cargado: " + this.vectorPropiedades.size() + " propiedades");
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -312,12 +363,19 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			insertarPropiedad();
 		} else if (btnEdit == e.getSource()) {
 			// Editamos una propiedad a modo de prueba.
-			Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedades();
-			editarPropiedad(propiedades[0]);
+			if (tableContent.getSelectedRow() >= 0) {
+				editarPropiedad(this.vectorPropiedades.get(tableContent.getSelectedRow()));
+			} else {
+				JOptionPane.showMessageDialog(Window.getInstance(), "Selecciona una propiedad para poder editarla", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		} else if (btnRemove == e.getSource()) {
-			// Eliminamos una propiedad a modo de prueba.
-			Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedades();
-			eliminarPropiedad(propiedades[0].getId());
+			if (tableContent.getSelectedRow() >= 0) {
+				eliminarPropiedad(this.vectorPropiedades.get(tableContent.getSelectedRow()).getId());
+			} else {
+				JOptionPane.showMessageDialog(Window.getInstance(), "Selecciona una propiedad para poder editarla", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		} else if (btnFind == e.getSource()) {
 			buscarPropiedades();
 		} else if (btnClear == e.getSource()) {
