@@ -219,6 +219,7 @@ public class PropiedadesPanel extends JPanel {
 
 		// Se habilitan o inhabilitan los controles
 		this.txtNombre.setEditable(mode != MODE_VIEW);
+		this.txtProvincia.setEditable(mode != MODE_VIEW);
 		this.txtDescripcion.setEditable(mode != MODE_VIEW);
 		this.txtDireccion.setEditable(mode != MODE_VIEW);
 		this.txtLatitud.setEditable(mode != MODE_VIEW);
