@@ -161,8 +161,8 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 		header[2] = "Descripci\u00f3n";
 		header[3] = "Direcci\u00f3n";
 		header[4] = "Provincia";
-		header[5] = "\u00c1rea";
-		header[6] = "Precio";
+		header[5] = "\u00c1rea (m2)";
+		header[6] = "Precio (€)";
 
 		modelTable = new DefaultTableModel(header, 0);
 
@@ -267,18 +267,11 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 	public void loadData() {
 		// TODO Obtener las propiedades del servidor y cargar la tabla
 		entities.xsd.Propiedad[] propiedades = Axis2Manager.getInstance().obtenerPropiedades();
-		if (propiedades.length > 0) {
+		if (propiedades != null && propiedades.length > 0) {
 			this.vectorPropiedades = new Vector<entities.xsd.Propiedad>();
 			modelTable.setDataVector(new String[propiedades.length][header.length], header);
 			for (int i = 0; i < propiedades.length; i++) {
 				this.vectorPropiedades.addElement(propiedades[i]);
-
-				header[1] = "Nombre";
-				header[2] = "Descripci\u00f3n";
-				header[3] = "Direcci\u00f3n";
-				header[4] = "Provincia";
-				header[5] = "\u00c1rea";
-				header[6] = "Precio";
 				// ID
 				tableContent.getModel().setValueAt(Integer.toString(propiedades[i].getId()), i, 0);
 				// NOMBRE
@@ -309,13 +302,6 @@ public class PropiedadesListPanel extends JPanel implements ActionListener {
 			modelTable.setDataVector(new String[propiedades.length][header.length], header);
 			for (int i = 0; i < propiedades.length; i++) {
 				this.vectorPropiedades.addElement(propiedades[i]);
-
-				header[1] = "Nombre";
-				header[2] = "Descripci\u00f3n";
-				header[3] = "Direcci\u00f3n";
-				header[4] = "Provincia";
-				header[5] = "\u00c1rea";
-				header[6] = "Precio";
 				// ID
 				tableContent.getModel().setValueAt(Integer.toString(propiedades[i].getId()), i, 0);
 				// NOMBRE

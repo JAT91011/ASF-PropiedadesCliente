@@ -7,7 +7,7 @@
         <direccion>C/ La Iglesia, 10, Atxondo</direccion>
         <latitud>43.271536</latitud>
         <longitud>-2.940206</longitud>
-        <area>400m2</area>
+        <area>400</area>
         <precio>100.00</precio>
         <provincia>
             <nombre>Vizcaya</nombre>
@@ -20,7 +20,7 @@
         <direccion>C/ Donibane, 11, Orduña</direccion>
         <latitud>42.995375</latitud>
         <longitud>-3.010556</longitud>
-        <area>380m2</area>
+        <area>380</area>
         <precio>110.00</precio>
         <provincia>
             <nombre>Vizcaya</nombre>
